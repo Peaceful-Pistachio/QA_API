@@ -10,7 +10,7 @@
 --
 -- ---
 
-DROP TABLE IF EXISTS `product`;
+DROP TABLE IF EXISTS product;
 
 CREATE TABLE `product` (
   `id` INTEGER NOT NULL AUTO_INCREMENT DEFAULT NULL UNIQUE,
@@ -22,59 +22,63 @@ CREATE TABLE `product` (
 --
 -- ---
 
-DROP TABLE IF EXISTS `questions`;
+DROP TABLE IF EXISTS questions;
 
-CREATE TABLE `questions` (
-  `id` INTEGER AUTO_INCREMENT NOT NULL,
-  `question` VARCHAR(255) NOT NULL,
-  `asker_name` VARCHAR(100) NOT NULL,
-  `reported` BOOLEAN DEFAULT NULL, -- ---or `reported` tinyint(1) DEFAULT NULL
-  `helpfullness` INTEGER NOT NULL DEFAULT NULL,
-  `date` DATE DEFAULT GETDATE()
-  `product_id` INTEGER NOT NULL,
-  PRIMARY KEY (`id`)
+   CREATE TABLE questions (
+   id SERIAL PRIMARY key,
+   product_id INTEGER NOT NULL,
+   body VARCHAR(1000) NOT NULL,
+   date_written numeric default 0,
+   asker_name VARCHAR(255) NOT NULL,
+   asker_email  VARCHAR(255) NOT NULL,
+   reported BOOLEAN DEFAULT false,
+   helpful INTEGER NOT NULL DEFAULT NULL
 );
+
+ALTER TABLE questions ADD question_timestamp timestamp;
+
 
 -- ---
 -- Table 'answers'
 --
 -- ---
 
-DROP TABLE IF EXISTS `answers`;
+DROP TABLE IF EXISTS answers;
 
-CREATE TABLE `answers` (
-  `id` INTEGER NOT NULL AUTO_INCREMENT,
-  `question_id` INTEGER NOT NULL,
-  `body` VARCHAR(255) NOT NULL,
-  `date_written` DATE DEFAULT GETDATE()
-  `answerer_name` VARCHAR(100) NOT NULL,
-  `answerer_email`  VARCHAR(100) NOT NULL,
-  `reported` BOOLEAN DEFAULT NULL,
-  `helpful` INTEGER NOT NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+CREATE TABLE answers (
+  id SERIAL PRIMARY key,
+  question_id INTEGER NOT NULL,
+  body VARCHAR(1000) NOT NULL,
+  date_written numeric default 0,
+  answerer_name VARCHAR(255) NOT NULL,
+  answerer_email  VARCHAR(255) NOT NULL,
+  reported BOOLEAN DEFAULT false,
+  helpful INTEGER NOT NULL DEFAULT NULL
 );
+
+ALTER TABLE answers ADD answer_timestamp timestamp;
+UPDATE answers SET answer_timestamp = to_timestamp(date_written / 1000);
 
 -- ---
 -- Table 'photos'
 --
 -- ---
 
-DROP TABLE IF EXISTS `photos`;
+DROP TABLE IF EXISTS photos;
 
-CREATE TABLE `photos` (
-  `id` INTEGER NOT NULL AUTO_INCREMENT,
-  `url` INTEGER NOT NULL DEFAULT NULL,
-  `answer_id` INTEGER NOT NULL,
-  PRIMARY KEY (`id`)
-);
+CREATE TABLE photos (
+   id SERIAL PRIMARY key,
+	answer_id INTEGER NOT NULL,
+  	url VARCHAR(1000) NOT NULL
+)
 
 -- ---
 -- Foreign Keys
 -- ---
 
-ALTER TABLE `questions` ADD FOREIGN KEY (product_id) REFERENCES `product` (`id`);
-ALTER TABLE `answers` ADD FOREIGN KEY (question_id) REFERENCES `questions` (`id`);
-ALTER TABLE `photos` ADD FOREIGN KEY (answer_id) REFERENCES `answers` (`id`);
+ALTER TABLE questions ADD FOREIGN KEY (product_id) REFERENCES product (id);
+ALTER TABLE answers ADD FOREIGN KEY (question_id) REFERENCES questions (id);
+ALTER TABLE photos ADD FOREIGN KEY (answer_id) REFERENCES answers (id);
 
 -- ---
 -- Table Properties

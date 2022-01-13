@@ -1,0 +1,25 @@
+{
+  "name": "qa_api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Peaceful-Pistachio/QA_API.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Peaceful-Pistachio/QA_API/issues"
+  },
+  "homepage": "https://github.com/Peaceful-Pistachio/QA_API#readme",
+  "dependencies": {
+    "express": "^4.17.2",
+    "mongoose": "^6.1.6",
+    "nodemon": "^2.0.15",
+    "postgres": "^1.0.2"
+  }
+}
