@@ -37,6 +37,8 @@ DROP TABLE IF EXISTS questions;
 
 ALTER TABLE questions ADD question_timestamp timestamp;
 
+CREATE INDEX idx_product_id ON questions(product_id);
+
 
 -- ---
 -- Table 'answers'
@@ -59,6 +61,8 @@ CREATE TABLE answers (
 ALTER TABLE answers ADD answer_timestamp timestamp;
 UPDATE answers SET answer_timestamp = to_timestamp(date_written / 1000);
 
+CREATE INDEX idx_question_id ON answers(question_id);
+
 -- ---
 -- Table 'photos'
 --
@@ -71,6 +75,8 @@ CREATE TABLE photos (
 	answer_id INTEGER NOT NULL,
   	url VARCHAR(1000) NOT NULL
 )
+
+CREATE INDEX idx_answer_id ON photos(answer_id);
 
 -- ---
 -- Foreign Keys
