@@ -37,6 +37,7 @@ app.get('/qa/questions/:question_id/answers', (req, res) => {
 
 })
 
+//TO DO: WORK ON POST
 app.post('/qa/questions', (req, res) => {
   db.postQuestion(req.body)
   .then((data) => {
@@ -48,14 +49,30 @@ app.post('/qa/questions', (req, res) => {
 
 
 app.post('/qa/questions/:question_id/answers', (req, res) => {
-  // db.postAnswer(req.body)
-  // .then((data) => {
-  //   // res.status(201).send(data)
-  //   console.log(data)
-  // })
-  // .catch(err => res.status(500).send(err))
+  db.postAnswer(req.body)
+  .then((data) => {
+    // res.status(201).send(data)
+    console.log(data)
+  })
+  .catch(err => res.status(500).send(err))
 })
 
+app.put('/qa/questions/:question_id/helpful', (req, res) => {
+  db.addQuestionHelpfulness(req.params.question_id)
+  .then(() => {
+    res.status(204).send(data);
+  })
+  .catch(err => res.status(500).send(err))
+})
+
+app.put('/qa/answers/:answer_id/helpful', (req, res) => {
+
+})
+
+
+app.put('/qa/answers/:answer_id/report', (req, res) => {
+
+})
 
 
 app.listen(port, () => {
