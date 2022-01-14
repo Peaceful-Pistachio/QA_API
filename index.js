@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const port = 3000;
+var router = express.Router()
 const db = require('./database_postgreSQL');
 const helper = require('./helpers');
 
@@ -12,18 +13,13 @@ app.get('/qa/questions', (req, res) => {
   var count = req.query.count;
   var page = req.query.count;
 
-  helper.getQuestionsWithAnswers(product_id, count, page)
-
-//  db.getQuestionsList(product_id, count, page)
-//  .then((result) => {
-//    //res.status(200).send(result);
-//    console.log(result.rows)
-//    console.log("Questions list succesfully sent!")
-//  })
-//  .catch((err) => {
-//    console.log(err)
-//  })
-  res.send('Hello World!')
+  helper.getQuestionsWithAnswers(product_id, count, page, (data) => {
+    if(!data) {
+      res.status(404).send("Question could not be found")
+    } else {
+      res.status(200).send(data)
+    }
+  })
 })
 
 //Answers List -> GET /qa/questions/:question_id/answers
@@ -35,11 +31,32 @@ app.get('/qa/questions/:question_id/answers', (req, res) => {
   db.getAnswersList(question_id, count, page)
   .then((result) => {
     console.log("result:", result.rows);
-    //res.status(200).send(result);
+    res.status(200).send(result.rows);
    console.log("Answers list succesfully sent!")
   })
-  
+
 })
+
+app.post('/qa/questions', (req, res) => {
+  db.postQuestion(req.body)
+  .then((data) => {
+    // res.status(201).send(data)
+    console.log(data)
+  })
+  .catch(err => res.status(500).send(err))
+})
+
+
+app.post('/qa/questions/:question_id/answers', (req, res) => {
+  // db.postAnswer(req.body)
+  // .then((data) => {
+  //   // res.status(201).send(data)
+  //   console.log(data)
+  // })
+  // .catch(err => res.status(500).send(err))
+})
+
+
 
 app.listen(port, () => {
   console.log(`app listening at http://localhost:${port}`)

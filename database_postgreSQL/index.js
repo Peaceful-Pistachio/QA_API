@@ -33,7 +33,28 @@ const getQuestionsList = (product_id, count, page) => {
   `))
  }
 
+ const getAnswersListByIds = (question_ids, page, count) => {
+  var sqlQueries = question_ids.map(questionId =>
+    `(SELECT *
+      FROM answers
+      WHERE question_id=${questionId}
+      ORDER BY helpful DESC
+      LIMIT ${count})
+    `
+  )
+
+  var sqlQueryFinal = sqlQueries.join(" UNION ALL ")
+
+  return (client.query(sqlQueryFinal))
+}
+
+const postQuestion = () => {
+
+}
+
 module.exports = {
   getQuestionsList,
-  getAnswersList
+  getAnswersList,
+  getAnswersListByIds,
+  postQuestion
 }

@@ -1,23 +1,26 @@
 const db = require('../database_postgreSQL');
 
-const getQuestionsWithAnswers = (product_id, count, page) => {
-
-  return db.getQuestionsList(product_id, count, page)
-  .then((result) => {
-    result.rows.map(item =>
-      (
-        db.getAnswersList(item.id, 1, 5).then(data => console.log(data.rows))
-      )
-    )
+const getQuestionsWithAnswers = (product_id, count, page, cb) => {
+ return db.getQuestionsList(product_id, count, page)
+  .then((questions) => {
+    var questionIds = questions.rows.map(question => question.id)
+    return db.getAnswersListByIds(questionIds, count, page)
+              .then(answers => {
+                questions.rows.map(question => {
+                  var filteredAnswers = answers.rows.filter(answer => answer.question_id === question.id);
+                  var filteredAnswersConverted = filteredAnswers.map(answer => {
+                    var result = {}
+                    result[answer.id] = {answer};
+                    return result
+                  })
+                  question['answers'] = filteredAnswersConverted;
+                })
+                cb(questions.rows)
+              })
   })
-
-}
-
-const test = () => {
-  console.log('helper works')
+  .catch((err) => console.error(err.stack));
 }
 
 module.exports = {
-  getQuestionsWithAnswers,
-  test
+  getQuestionsWithAnswers
 }
