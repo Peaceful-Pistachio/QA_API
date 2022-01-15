@@ -53,9 +53,15 @@ const postQuestion = () => {
 }
 
 const addQuestionHelpfulness = (question_id) => {
-  let sqlQuery = 'UPDATE reviews SET helpfulness = helpfulness + 1 WHERE id = $1';
-  let value = [question_id];
-  return client.query(sqlQuery, value)
+  return client.query( `UPDATE questions SET helpful = helpful + 1 WHERE id=${question_id}`)
+    .then((results) => {
+      return results;
+    })
+    .catch((err) => console.error(err.stack));
+}
+
+const addAnswerHelpfulness = (answer_id) => {
+  return client.query( `UPDATE answers SET helpful = helpful + 1 WHERE id=${answer_id}`)
     .then((results) => {
       return results;
     })
@@ -66,5 +72,7 @@ module.exports = {
   getQuestionsList,
   getAnswersList,
   getAnswersListByIds,
-  postQuestion
+  postQuestion,
+  addQuestionHelpfulness,
+  addAnswerHelpfulness
 }

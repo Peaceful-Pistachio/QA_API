@@ -59,14 +59,18 @@ app.post('/qa/questions/:question_id/answers', (req, res) => {
 
 app.put('/qa/questions/:question_id/helpful', (req, res) => {
   db.addQuestionHelpfulness(req.params.question_id)
-  .then(() => {
+  .then((data) => {
     res.status(204).send(data);
   })
   .catch(err => res.status(500).send(err))
 })
 
 app.put('/qa/answers/:answer_id/helpful', (req, res) => {
-
+  db.addAnswerHelpfulness(req.params.answer_id)
+  .then((data) => {
+    res.status(204).send(data);
+  })
+  .catch(err => res.status(500).send(err))
 })
 
 
