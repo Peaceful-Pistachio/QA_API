@@ -2,8 +2,9 @@ const express = require('express')
 const app = express()
 const port = 3000;
 var router = express.Router()
-const db = require('./database_postgreSQL');
+const db = require('./model');
 const helper = require('./helpers');
+const controller = require('./controller')
 
 app.use(express.json());
 
@@ -14,6 +15,7 @@ app.get('/qa/questions', (req, res) => {
   var page = req.query.count;
 
   helper.getQuestionsWithAnswers(product_id, count, page, (data) => {
+    //todo: default values for count and page, review math calculation
     if(!data) {
       res.status(404).send("Question could not be found")
     } else {
@@ -30,13 +32,9 @@ app.get('/qa/questions/:question_id/answers', (req, res) => {
 
   db.getAnswersList(question_id, count, page)
   .then((result) => {
-    console.log("result:", result.rows);
     res.status(200).send(result.rows);
-   console.log("Answers list succesfully sent!")
   })
-
 })
-
 
 app.post('/qa/questions', (req, res) => {
   db.createQuestion(req.body)

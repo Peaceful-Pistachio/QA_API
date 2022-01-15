@@ -1,4 +1,4 @@
-const db = require('../database_postgreSQL');
+const db = require('../model');
 
 const getQuestionsWithAnswers = (product_id, count, page, cb) => {
  return db.getQuestionsList(product_id, count, page)
