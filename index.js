@@ -58,7 +58,7 @@ app.post('/qa/questions/:question_id/answers', (req, res) => {
 })
 
 app.put('/qa/questions/:question_id/helpful', (req, res) => {
-  db.addQuestionHelpfulness(req.params.question_id)
+  db.updateQuestionHelpfulness(req.params.question_id)
   .then((data) => {
     res.status(204).send(data);
   })
@@ -66,7 +66,7 @@ app.put('/qa/questions/:question_id/helpful', (req, res) => {
 })
 
 app.put('/qa/answers/:answer_id/helpful', (req, res) => {
-  db.addAnswerHelpfulness(req.params.answer_id)
+  db.updateAnswerHelpfulness(req.params.answer_id)
   .then((data) => {
     res.status(204).send(data);
   })
@@ -75,7 +75,19 @@ app.put('/qa/answers/:answer_id/helpful', (req, res) => {
 
 
 app.put('/qa/answers/:answer_id/report', (req, res) => {
+  db.updateAnswersReported(req.params.answer_id)
+  .then((data) => {
+    res.status(204).send(data)
+  })
+  .catch(err => res.status(500).send(err))
+})
 
+app.put('/qa/questions/:question_id/report', (req, res) => {
+  db.updateQuestionsReported(req.params.question_id)
+  .then((data) => {
+    res.status(204).send(data)
+  })
+  .catch(err => res.status(500).send(err))
 })
 
 

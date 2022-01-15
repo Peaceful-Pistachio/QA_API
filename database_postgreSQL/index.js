@@ -12,7 +12,6 @@ module.exports.client = client;
 
 
 
-//Refactor: use pages, join answers
 //List Questions -> GET /qa/questions
 const getQuestionsList = (product_id, count, page) => {
   return (client.query(`SELECT * FROM questions
@@ -52,7 +51,7 @@ const postQuestion = () => {
 
 }
 
-const addQuestionHelpfulness = (question_id) => {
+const updateQuestionHelpfulness = (question_id) => {
   return client.query( `UPDATE questions SET helpful = helpful + 1 WHERE id=${question_id}`)
     .then((results) => {
       return results;
@@ -60,7 +59,7 @@ const addQuestionHelpfulness = (question_id) => {
     .catch((err) => console.error(err.stack));
 }
 
-const addAnswerHelpfulness = (answer_id) => {
+const updateAnswerHelpfulness = (answer_id) => {
   return client.query( `UPDATE answers SET helpful = helpful + 1 WHERE id=${answer_id}`)
     .then((results) => {
       return results;
@@ -68,11 +67,29 @@ const addAnswerHelpfulness = (answer_id) => {
     .catch((err) => console.error(err.stack));
 }
 
+const updateAnswersReported = (answer_id) => {
+  return client.query( `UPDATE answers SET reported = true WHERE id=${answer_id}`)
+  .then((results) => {
+    return results;
+  })
+  .catch((err) => console.error(err.stack));
+}
+
+const updateQuestionsReported = (question_id) => {
+  return client.query( `UPDATE questions SET reported = true WHERE id=${question_id}`)
+  .then((results) => {
+    return results;
+  })
+  .catch((err) => console.error(err.stack));
+}
+
 module.exports = {
   getQuestionsList,
   getAnswersList,
   getAnswersListByIds,
   postQuestion,
-  addQuestionHelpfulness,
-  addAnswerHelpfulness
+  updateQuestionHelpfulness,
+  updateAnswerHelpfulness,
+  updateAnswersReported,
+  updateQuestionsReported
 }
