@@ -37,21 +37,20 @@ app.get('/qa/questions/:question_id/answers', (req, res) => {
 
 })
 
-//TO DO: WORK ON POST
+
 app.post('/qa/questions', (req, res) => {
-  db.postQuestion(req.body)
+  db.createQuestion(req.body)
   .then((data) => {
-    // res.status(201).send(data)
-    console.log(data)
+    res.status(201).send()
+    console.log("body", req.body)
   })
   .catch(err => res.status(500).send(err))
 })
 
-
 app.post('/qa/questions/:question_id/answers', (req, res) => {
   db.postAnswer(req.body)
   .then((data) => {
-    // res.status(201).send(data)
+    res.status(201).send(data)
     console.log(data)
   })
   .catch(err => res.status(500).send(err))
