@@ -32,12 +32,16 @@ DROP TABLE IF EXISTS questions;
    asker_name VARCHAR(255) NOT NULL,
    asker_email  VARCHAR(255) NOT NULL,
    reported BOOLEAN DEFAULT false,
-   helpful INTEGER NOT NULL DEFAULT NULL
+   helpful INTEGER DEFAULT NULL
 );
 
 ALTER TABLE questions ADD question_timestamp timestamp;
 
 CREATE INDEX idx_product_id ON questions(product_id);
+ALTER TABLE questions ALTER column helpful drop not null;
+ALTER TABLE questions ALTER COLUMN question_timestamp SET DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE questions RENAME COLUMN question_timestamp TO date;
+
 
 
 -- ---
@@ -55,13 +59,17 @@ CREATE TABLE answers (
   answerer_name VARCHAR(255) NOT NULL,
   answerer_email  VARCHAR(255) NOT NULL,
   reported BOOLEAN DEFAULT false,
-  helpful INTEGER NOT NULL DEFAULT NULL
+  helpful INTEGER DEFAULT 0
 );
 
 ALTER TABLE answers ADD answer_timestamp timestamp;
 UPDATE answers SET answer_timestamp = to_timestamp(date_written / 1000);
 
 CREATE INDEX idx_question_id ON answers(question_id);
+ALTER TABLE answers ALTER column helpful drop not null;
+ALTER TABLE answers ALTER COLUMN answer_timestamp SET DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE answers RENAME COLUMN answer_timestamp TO date;
+
 
 -- ---
 -- Table 'photos'
