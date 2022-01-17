@@ -46,16 +46,17 @@ app.post('/qa/questions', (req, res) => {
 })
 
 app.post('/qa/questions/:question_id/answers', (req, res) => {
-  db.postAnswer(req.body)
+  console.log(req.body)
+  helper.postAnswerWithPhotos(req.body)
   .then((data) => {
-    res.status(201).send(data)
-    console.log(data)
+    res.status(201).send()
   })
   .catch(err => res.status(500).send(err))
+
 })
 
 app.put('/qa/questions/:question_id/helpful', (req, res) => {
-  db.updateQuestionHelpfulness(req.params.question_id)
+  db.updateQuestionHelpfulness(req.body)
   .then((data) => {
     res.status(204).send(data);
   })

@@ -4,7 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "test": "jest --detectOpenHandles"
   },
   "repository": {
     "type": "git",
@@ -18,9 +19,11 @@
   "homepage": "https://github.com/Peaceful-Pistachio/QA_API#readme",
   "dependencies": {
     "express": "^4.17.2",
+    "jest": "^27.4.7",
     "mongoose": "^6.1.6",
     "nodemon": "^2.0.15",
     "pg": "^8.7.1",
-    "postgres": "^1.0.2"
+    "postgres": "^1.0.2",
+    "supertest": "^6.2.1"
   }
 }

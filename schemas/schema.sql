@@ -81,7 +81,7 @@ DROP TABLE IF EXISTS photos;
 CREATE TABLE photos (
    id SERIAL PRIMARY key,
 	answer_id INTEGER NOT NULL,
-  	url VARCHAR(1000) NOT NULL
+  url VARCHAR(1000) NOT NULL
 )
 
 CREATE INDEX idx_answer_id ON photos(answer_id);

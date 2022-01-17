@@ -1,14 +1,6 @@
 const { Client, Pool } = require('pg');
 
-const client = new Client({
-  database: 'sdc',
-  port: 5432,
-});
-client.connect()
-  .then(() => { console.log('PostgreSQL connected!'); })
-  .catch(e => console.error(e.stack));
-
-module.exports.client = client;
+const client = require('./db_connection.js')
 
 
 //List Questions -> GET /qa/questions
@@ -52,7 +44,7 @@ const getQuestionsList = (product_id, count, page) => {
 }
 
 //it works but maybe need to refactor fields
-const createQuestion = ({ product_id, body, asker_name, asker_email, reported, helpful}) => {
+const createQuestion = (product_id, body, asker_name, asker_email, reported, helpful) => {
  let sqlQuery = `INSERT INTO questions(product_id, body, asker_name, asker_email, helpful)
     VALUES(${product_id}, '${body}', '${asker_name}', '${asker_email}', 0)`
 
@@ -61,6 +53,45 @@ const createQuestion = ({ product_id, body, asker_name, asker_email, reported, h
         return results;
      })
     .catch((err) => console.error(err.stack));
+}
+
+const createAnswer = (question_id, body, answerer_name, answerer_email) => {
+  let sqlQuery = `INSERT INTO answers(question_id, body, answerer_name, answerer_email)
+  VALUES(${question_id}, '${body}', '${answerer_name}', '${answerer_email}')`
+
+  return client.query(sqlQuery)
+  .then((results) => {
+    console.log(results);
+ })
+.catch((err) => console.error(err.stack));
+}
+
+const createAnswerWithPhoto = (question_id, body, answerer_name, answerer_email, photos) => {
+  console.log("photos:  ",photos);
+  let photosToInsert = photos.map(url => (
+    `((SELECT answer_id FROM result), '${url}')`
+  ))
+  let sqlQueryFinal = photosToInsert.join(',');
+
+
+  let sqlQuery =`BEGIN;
+  WITH result AS (
+    INSERT INTO answers(question_id, body, answerer_name, answerer_email)
+    VALUES(${question_id}, '${body}', '${answerer_name}', '${answerer_email}')
+    RETURNING id AS answer_id
+  )
+  INSERT INTO photos (answer_id, url)
+    VALUES
+    ${sqlQueryFinal};
+  COMMIT;
+  `
+
+  return client.query(sqlQuery)
+    .then((results) => {
+      return results;
+    })
+    .catch((err) => console.error(err.stack));
+
 }
 
 const updateQuestionHelpfulness = (question_id) => {
@@ -100,6 +131,8 @@ module.exports = {
   getAnswersList,
   getAnswersListByIds,
   createQuestion,
+  createAnswer,
+  createAnswerWithPhoto,
   updateQuestionHelpfulness,
   updateAnswerHelpfulness,
   updateAnswersReported,
