@@ -75,6 +75,7 @@ const createAnswer = (question_id, body, answerer_name, answerer_email) => {
 .catch((err) => console.error(err.stack));
 }
 
+//https://stackoverflow.com/questions/21764939/postgresql-insert-into-multiple-tables-using-foreign-key-from-first-insertion-i
 const createAnswerWithPhoto = (question_id, body, answerer_name, answerer_email, photos) => {
   console.log("photos:  ",photos);
   let photosToInsert = photos.map(url => (

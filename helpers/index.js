@@ -8,12 +8,11 @@ const getQuestionsWithAnswers = (product_id, count, page, cb) => {
               .then(answers => {
                 questions.rows.map(question => {
                   var filteredAnswers = answers.rows.filter(answer => answer.question_id === question.id);
-                  var filteredAnswersConverted = filteredAnswers.map(answer => {
-                    var result = {}
-                    result[answer.id] = {answer};
-                    return result
+                  var result = {};
+                  filteredAnswers.forEach(answer => {
+                    result[answer.id] = answer;
                   })
-                  question['answers'] = filteredAnswersConverted;
+                  question['answers'] = result;
                 })
                 cb(questions.rows)
               })
