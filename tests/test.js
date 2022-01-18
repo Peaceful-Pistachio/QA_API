@@ -1,15 +1,18 @@
 const frisby = require('frisby');
 const Joi = frisby.Joi;
 
-it ('GET questions should return a status of 200', function () {
+let randomQuestionId = Math.floor(Math.random() * 3518967) + 1;
+let randomAnswerId = Math.floor(Math.random() * 6879329) + 1;
+
+it ('GET questions expected to return a status code of 200', function () {
   return frisby
-    .get('http://localhost:3000/qa/questions?product_id=70460&count=3&page=1')
+    .get(`http://localhost:3000/qa/questions?product_id=${randomQuestionId}`)
     .expect('status', 200)
 });
 
-it ('GET answers should return a status of 200', function () {
+it ('GET answers expected to return a status code of 200', function () {
   return frisby
-    .get(`http://localhost:3000/qa/questions/247762/answers?count=2&page=1`)
+    .get(`http://localhost:3000/qa/questions/${randomAnswerId}/answers?count=2&page=1`)
     .expect('status', 200);
 });
 
@@ -19,9 +22,8 @@ it ('POST question should return a status of 201 Created', function () {
       body: {
         "id": 3518967,
         "product_id": 70460,
-        "body": "hello can you help me?",
-        "date_written": "0",
-        "asker_name": "avona",
+        "body": "Is it silk?",
+        "asker_name": "anna",
         "asker_email": "aaa@gmail.com",
         "reported": false,
         "helpful": 0,
