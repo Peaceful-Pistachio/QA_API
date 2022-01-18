@@ -1,1 +1,0 @@
-//Will clean up  and structure my code, for now all the routes / endpoints are in server.js

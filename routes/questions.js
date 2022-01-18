@@ -6,14 +6,15 @@ const helper = require('../helpers');
 router.route('/')
 .get((req, res) => {
   var product_id = req.query.product_id;
-  var count = req.query.count;
-  var page = req.query.count;
+  var count = req.query.count || 4;
+  var page = req.query.count || 1;
 
   helper.getQuestionsWithAnswers(product_id, count, page, (data) => {
     //todo: default values for count and page, review math calculation
     if(!data) {
       res.status(404).send("Question could not be found")
     } else {
+      console.log("data: ", data)
       res.status(200).send(data)
     }
   })
@@ -31,8 +32,8 @@ router.route('/')
 router.route('/:question_id/answers')
 .get((req, res) => {
   var question_id = req.params.question_id;
-  var count = req.query.count;
-  var page = req.query.count;
+  var count = req.query.count || 2;
+  var page = req.query.count || 1;
 
   db.getAnswersList(question_id, count, page)
   .then((result) => {

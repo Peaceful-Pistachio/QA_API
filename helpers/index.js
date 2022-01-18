@@ -20,7 +20,7 @@ const getQuestionsWithAnswers = (product_id, count, page, cb) => {
   })
   .catch((err) => console.error(err.stack));
 }
-
+//fix console logs
 const postAnswerWithPhotos = ({question_id, body, answerer_name, answerer_email, photos}) => {
   if (photos.length) {
     return db.createAnswerWithPhoto(question_id, body, answerer_name, answerer_email, photos)
@@ -32,7 +32,6 @@ const postAnswerWithPhotos = ({question_id, body, answerer_name, answerer_email,
   .then(data => {
     console.log(data.body)
   })
-
 }
 
 

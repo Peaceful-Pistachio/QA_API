@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",
-    "test": "jest --detectOpenHandles"
+    "test": "jest --forceExit"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,7 @@
   "homepage": "https://github.com/Peaceful-Pistachio/QA_API#readme",
   "dependencies": {
     "express": "^4.17.2",
+    "frisby": "^2.1.3",
     "jest": "^27.4.7",
     "mongoose": "^6.1.6",
     "nodemon": "^2.0.15",

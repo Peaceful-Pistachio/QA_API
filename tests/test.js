@@ -1,18 +1,3 @@
-// const server = require('../server.js');
-// const express = require('express');
-// const app = express();
-// const request = require('supertest');
-
-
-// describe('Basic testing of tests and server:', () => {
-//   test("GET /", (done) => {
-//     request(app)
-//       .get('/qa/questions?product_id=70460&count=3&page=1')
-//       .expect(404)
-//       .end(done)
-//   });
-// })
-
 const frisby = require('frisby');
 const Joi = frisby.Joi;
 

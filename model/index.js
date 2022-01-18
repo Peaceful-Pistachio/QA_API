@@ -1,7 +1,4 @@
-const { Client, Pool } = require('pg');
-
 const client = require('./db_connection.js')
-
 
 //List Questions -> GET /qa/questions
 const getQuestionsList = (product_id, count, page) => {
@@ -26,16 +23,28 @@ const getQuestionsList = (product_id, count, page) => {
   LIMIT ${count}
   OFFSET ${offset}
   `))
+
  }
 
  const getAnswersListByIds = (question_ids, page, count) => {
   let sqlQueries = question_ids.map(questionId =>
-    `(SELECT *
-      FROM answers
+    // `(SELECT * FROM (SELECT *
+    //   FROM answers a
+    //   WHERE question_id=${questionId}
+    //   ORDER BY helpful DESC
+    //   LIMIT 5) subq
+    //   LEFT JOIN photos p on subq.id = p.answer_id
+    // `
+    `SELECT subq.id, subq.question_id, subq.body, subq.date, subq.answerer_name, subq.helpful AS helpfulness, array_agg(p.url) AS photos
+    FROM
+      (SELECT *
+      FROM answers a
       WHERE question_id=${questionId}
       ORDER BY helpful DESC
-      LIMIT ${count})
-    `
+      LIMIT 5) subq
+    LEFT JOIN photos p on subq.id = p.answer_id
+    GROUP BY subq.id, subq.question_id, subq.body, subq.date, subq.answerer_name, subq.helpful`
+
   )
 
   let sqlQueryFinal = sqlQueries.join(" UNION ALL ")
@@ -73,7 +82,6 @@ const createAnswerWithPhoto = (question_id, body, answerer_name, answerer_email,
   ))
   let sqlQueryFinal = photosToInsert.join(',');
 
-
   let sqlQuery =`BEGIN;
   WITH result AS (
     INSERT INTO answers(question_id, body, answerer_name, answerer_email)
@@ -85,7 +93,6 @@ const createAnswerWithPhoto = (question_id, body, answerer_name, answerer_email,
     ${sqlQueryFinal};
   COMMIT;
   `
-
   return client.query(sqlQuery)
     .then((results) => {
       return results;
