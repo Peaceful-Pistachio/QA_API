@@ -1,13 +1,30 @@
 const { Client, Pool } = require('pg');
 
-const client = new Client({
+const pool = new Pool({
+  user: 'annasarafanova',
+  password: 'password',
+  host: 'localhost',
   database: 'sdc',
-  port: 5432,
+  max: 20,
+  idleTimeoutMillis: 1000,
+  connectionTimeoutMillis: 2000,
 });
-client.connect()
-  .then(() => {
-     console.log('PostgreSQL connected!');
-     })
-  .catch(e => console.error(e.stack));
 
-module.exports = client;
+pool.on('error', (err, client) => {
+  console.error('ERROR: ', err);
+  process.exit(-1);
+});
+
+module.exports = pool;
+
+// const client = new Client({
+//   database: 'sdc',
+//   port: 5432,
+// });
+// client.connect()
+//   .then(() => {
+//      console.log('PostgreSQL connected!');
+//      })
+//   .catch(e => console.error(e.stack));
+
+// module.exports = client;

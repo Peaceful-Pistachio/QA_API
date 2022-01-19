@@ -21,7 +21,7 @@ CREATE TABLE `product` (
 -- Table 'questions'
 --
 -- ---
-
+--Multicolumn idexes !!!!!!!!!!!
 DROP TABLE IF EXISTS questions;
 
    CREATE TABLE questions (
@@ -38,9 +38,11 @@ DROP TABLE IF EXISTS questions;
 ALTER TABLE questions ADD question_timestamp timestamp;
 
 CREATE INDEX idx_product_id ON questions(product_id);
+CREATE INDEX idx_helpful ON questions(helpful);
 ALTER TABLE questions ALTER column helpful drop not null;
 ALTER TABLE questions ALTER COLUMN question_timestamp SET DEFAULT CURRENT_TIMESTAMP;
 ALTER TABLE questions RENAME COLUMN question_timestamp TO date;
+ALTER TABLE questions DROP COLUMN date_written;
 
 
 
@@ -69,6 +71,8 @@ CREATE INDEX idx_question_id ON answers(question_id);
 ALTER TABLE answers ALTER column helpful drop not null;
 ALTER TABLE answers ALTER COLUMN answer_timestamp SET DEFAULT CURRENT_TIMESTAMP;
 ALTER TABLE answers RENAME COLUMN answer_timestamp TO date;
+ALTER TABLE answers DROP COLUMN date_written;
+
 
 
 -- ---

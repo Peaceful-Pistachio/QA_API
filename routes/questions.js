@@ -10,11 +10,9 @@ router.route('/')
   var page = req.query.count || 1;
 
   helper.getQuestionsWithAnswers(product_id, count, page, (data) => {
-    //todo: default values for count and page, review math calculation
     if(!data) {
       res.status(404).send("Question could not be found")
     } else {
-      console.log("data: ", data)
       res.status(200).send(data)
     }
   })
@@ -23,7 +21,6 @@ router.route('/')
   db.createQuestion(req.body)
   .then((data) => {
     res.status(201).send()
-    console.log("body", req.body)
   })
   .catch(err => res.status(500).send(err))
 })

@@ -6,7 +6,7 @@ export const requests = new Counter('http_reqs');
 //100 250 500
 export const options = {
   vus: 100,
-  duration: '60s',
+  duration: '15s',
   // thresholds: {
   //   http_req_failed: ['rate<0.1'],
   // },

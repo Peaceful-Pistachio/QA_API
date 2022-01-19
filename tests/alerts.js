@@ -1,66 +1,38 @@
+const { Client } = require('pg');
+// const { success, failure } = require('./handler');
 
-// const { Client } = require('pg');
-// // const { getAlerts } = require('./alerts.js');
-// const request = require('supertest');
-// const app = require("../server.js");
+// const success = (data) => {};
+// const failure = (data) => {};
+
+//THIS IS THE FILE TO PRACTICE MOCK DB
+
+const getAlerts = async (event, context) => {
+  const client = new Client({
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_DATABASE,
+    password: process.env.DB_PASSWORD,
+    port: process.env.PORT,
+  });
+
+  await client.connect();
+
+  try {
+    const result = await client.query(`SELECT * FROM public.alerts;`);
+    console.log(result.rows);
+    client.end();
+    return { message: `${result.rowCount} item(s) returned`, data: result.rows, status: true };
+  } catch (e) {
+    console.error(e.stack);
+    client.end();
+    return { message: e, status: false };
+  }
+};
 
 
-const frisby = require('frisby');
-const Joi = frisby.Joi;
 
-let randomQuestionId = Math.floor(Math.random() * 3518967) + 1;
-let randomAnswerId = Math.floor(Math.random() * 6879329) + 1;
 
-function getRandomId() {
-  return Math.floor(Math.random() * 1000011) + 1;
-}
 
-it ('GET questions should return a status of 200 OK', function () {
-  let randomId = getRandomId();
-
-  return frisby
-    .get(`http://localhost:3000/qa/questions?product_id=${randomId}`)
-    .expect('status', 200);
-});
-
-it ('GET answers should return a status of 200 OK', function () {
-  return frisby
-    .get(`http://localhost:3000/qa/questions/${randomAnswerId}/answers?count=2&page=1`)
-    .expect('status', 200)
-});
-
-it ('POST answer should return a status of 201 CREATED', function () {
-  return frisby
-    .post(`http://localhost:3000/qa/questions/${randomAnswerId}/answers?count=1&page=2`, {
-      body: {
-          "question_id": 247762,
-          "body": "i did not like it",
-          "asker_name": "avona",
-          "asker_email": "aaa@gmail.com",
-    }
-
-    })
-    .expect('status', 201);
-});
-
-it ('POST question should return a status of 201 Created', function () {
-  return frisby
-    .post('http://localhost:3000/qa/questions', {
-      body: {
-        "id": 3518967,
-        "product_id": 70460,
-        "body": "Is it silk?",
-        "asker_name": "anna",
-        "asker_email": "aaa@gmail.com",
-        "reported": false,
-        "helpful": 0,
-        "date": null,
-        "answers": []
-    }
-
-    })
-    .expect('status', 201);
-});
 
 
 // jest.mock('pg', () => {
@@ -169,3 +141,8 @@ it ('POST question should return a status of 201 Created', function () {
 //     .expect('status', 200);
 // });
 
+
+
+module.exports = {
+    getAlerts
+}
