@@ -32,7 +32,7 @@ DROP TABLE IF EXISTS questions;
    asker_name VARCHAR(255) NOT NULL,
    asker_email  VARCHAR(255) NOT NULL,
    reported BOOLEAN DEFAULT false,
-   helpful INTEGER DEFAULT NULL
+   helpful INTEGER DEFAULT 0
 );
 
 ALTER TABLE questions ADD question_timestamp timestamp;
@@ -84,8 +84,8 @@ DROP TABLE IF EXISTS photos;
 
 CREATE TABLE photos (
    id SERIAL PRIMARY key,
-	answer_id INTEGER NOT NULL,
-  url VARCHAR(1000) NOT NULL
+	answer_id INTEGER ,
+  url VARCHAR(1000)
 )
 
 CREATE INDEX idx_answer_id ON photos(answer_id);

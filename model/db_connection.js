@@ -17,14 +17,3 @@ pool.on('error', (err, client) => {
 
 module.exports = pool;
 
-// const client = new Client({
-//   database: 'sdc',
-//   port: 5432,
-// });
-// client.connect()
-//   .then(() => {
-//      console.log('PostgreSQL connected!');
-//      })
-//   .catch(e => console.error(e.stack));
-
-// module.exports = client;

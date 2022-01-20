@@ -48,8 +48,8 @@ const getQuestionsList = (product_id, count, page) => {
 
 //it works but maybe need to refactor fields
 const createQuestion = (product_id, body, asker_name, asker_email, reported, helpful) => {
- let sqlQuery = `INSERT INTO questions(product_id, body, asker_name, asker_email, helpful)
-    VALUES(${product_id}, '${body}', '${asker_name}', '${asker_email}', 0)`
+ let sqlQuery = `INSERT INTO questions(product_id, body, asker_name, asker_email)
+    VALUES(${product_id}, '${body}', '${asker_name}', '${asker_email}')`
 
     return pool.query(sqlQuery)
       .then((results) => {
