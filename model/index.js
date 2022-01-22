@@ -13,6 +13,61 @@ const getQuestionsList = (product_id, count, page) => {
   return (pool.query(sqlQuery))
 }
 
+const newGetQuestionList = (product_id, count, page) => {
+  let offset = (page - 1) * count;
+  let sqlQuery = `SELECT product_id,
+                json_agg(json_build_object('question_id', q.id,
+                'question_body', q.body,
+                'asker_name', q.asker_name,
+                'asker_email', q.asker_email,
+                'helpful', q.helpful,
+                'reported', q.reported,
+                'date', q.date,
+                'answers', (
+                    SELECT coalesce(answers, '{}')
+                    FROM ( SELECT
+                      json_object_agg(
+                      id,
+                      json_build_object(
+                      'id', id,
+                      'body', body,
+                      'date', date,
+                      'answerer_name', answerer_name,
+                      'helpful', helpful,
+                      'photos', (
+                          SELECT coalesce(photos, '[]')
+                          FROM (
+                            SELECT json_agg(url) as photos
+                              FROM photos p
+                              WHERE p.id = a.id
+                              ) as photos
+                                )
+                                )
+                                ) as answers
+                                FROM answers a
+                                WHERE a.question_id = q.id
+                              ) as answers
+                            )
+                          )
+                        ) as results
+                      FROM (
+                        SELECT *
+                        FROM questions
+                        WHERE product_id=${product_id}
+                        AND reported = false
+              ORDER BY helpful DESC
+              LIMIT ${count}
+              OFFSET ${offset}
+              ) as q
+             GROUP BY 1;`
+
+  return pool.query(sqlQuery)
+      .then((results) => {
+          return results;
+  })
+  .catch((err) => console.error(err.stack));
+}
+
 //Answers List -> GET /qa/questions/:question_id/answers
  const getAnswersList = (question_id, page, count) => {
   let offset = (page - 1) * count;
@@ -129,7 +184,8 @@ const updateQuestionsReported = (question_id) => {
 }
 
 module.exports = {
-  getQuestionsList,
+ newGetQuestionList,
+getQuestionsList,
   getAnswersList,
   getAnswersListByIds,
   createQuestion,

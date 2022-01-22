@@ -9,13 +9,11 @@ router.route('/')
   var count = req.query.count || 4;
   var page = req.query.count || 1;
 
-  helper.getQuestionsWithAnswers(product_id, count, page, (data) => {
-    if(!data) {
-      res.status(404).send("Question could not be found")
-    } else {
-      res.status(200).send(data)
-    }
+  db.newGetQuestionList(product_id, count, page)
+  .then((result) => {
+    res.status(200).send(result.rows);
   })
+  .catch(err => res.status(500).send(err));
 })
 .post((req, res) => {
   db.createQuestion(req.body)
