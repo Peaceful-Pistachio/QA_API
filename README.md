@@ -1,10 +1,10 @@
 # QA_API
 
-SDC - System Design Capstone
+## SDC - System Design Capstone ##
 
-The backend server and database for a multiple component application.
+### The backend server and database for a multiple component application. ###
 
-Technologies used:
+### Technologies used: ###
 - Node.js
 - Express
 - Postgres
@@ -16,12 +16,12 @@ Technologies used:
 - NGINX
 - PGTune
 
-Installation:
+### Installation: ###
 - run 'npm install' to install dependencies.
 - run 'npm run start' to start the server.
 - Navigate to localhost:3000
 
-Endpoints:
+### Endpoints: ###
 
 -GET /qa/questions/
 ```
