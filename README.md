@@ -3,7 +3,6 @@
 SDC - System Design Capstone
 
 The backend server and database for a multiple component application.
-In this repo you can find the backend code for Questions and Answers component.
 
 
 Technologies used:
